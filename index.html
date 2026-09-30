@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>TeaSensei — пропорции</title>
+<style>
+  body{margin:0;font-family:system-ui,sans-serif;background:#FBF9F1;color:#1c1b15;display:flex;min-height:100vh;align-items:center;justify-content:center}
+  main{max-width:420px;padding:32px 24px;text-align:center}
+  h1{font-size:26px;margin:0 0 8px}
+  p{line-height:1.5;color:#4a4a3d}
+  a.btn{display:block;margin:24px 0 12px;padding:16px;border-radius:28px;background:#4d7a3e;color:#fff;text-decoration:none;font-weight:600;font-size:17px}
+  small{color:#7a7a6b}
+</style>
+</head>
+<body>
+<main>
+  <h1>TeaSensei</h1>
+  <p id="msg">С вами поделились пропорциями заваривания чая.</p>
+  <a class="btn" id="open" href="#">Открыть в TeaSensei</a>
+  <small id="hint">Если ничего не происходит — приложение TeaSensei не установлено на этом устройстве, либо откройте страницу в Chrome на телефоне с приложением.</small>
+</main>
+<script>
+  var data = location.hash.replace(/^#/, "");
+  var btn = document.getElementById("open");
+  if (!/^[A-Za-z0-9_-]+$/.test(data)) {
+    document.getElementById("msg").textContent = "В ссылке нет пропорций. Попросите отправить её ещё раз.";
+    btn.style.display = "none";
+  } else {
+    // Chrome на Android открывает приложение по intent://, остальные браузеры — по обычной схеме.
+    var isAndroid = /Android/i.test(navigator.userAgent);
+    var url = isAndroid
+      ? "intent://p/" + data + "#Intent;scheme=teasensei;package=com.zavarka.app;end"
+      : "teasensei://p/" + data;
+    btn.href = url;
+    if (isAndroid) setTimeout(function () { location.href = url; }, 400);
+  }
+</script>
+</body>
+</html>
